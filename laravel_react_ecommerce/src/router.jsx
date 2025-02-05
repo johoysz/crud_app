@@ -15,12 +15,8 @@ const router = createBrowserRouter ([
         element: <DefaultLayout />,
         children: [
             {
-                path: '/payMethod',
-                element: <PayMethod /> //follow the variable name used
-            },
-            {
                 path: '/details',
-                element: <Details />
+                element: <Details /> //follow the variable name used
             },
             {
                 path: '/payMethod',
