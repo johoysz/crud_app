@@ -12,7 +12,7 @@ export const ContextProvider = ({children}) => {
     const [user, setUser] = useState({
         name: 'John'
     });
-    const [token, _setToken] = useState(132); //add random
+    const [token, _setToken] = useState(243);
 
     const setToken = (token) => {
         _setToken(token);

@@ -1,34 +1,9 @@
-import { useState } from "react";
-import { useEffect } from 'react';
-import { useNavigate } from "react-router-dom";
 
-import orderImage from "../assets/images/black-tshirt.jpg";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Details = () => {
     const navigate = useNavigate();
-
-    useEffect(() => {
-        // Prevent scrolling on the page
-        document.body.style.overflow = 'hidden'; // Disable scrolling
-        document.documentElement.style.overflow = 'hidden'; // Prevent scrolling on html as well
-    
-        // Cleanup the effect on component unmount
-        return () => {
-          document.body.style.overflow = ''; // Reset overflow behavior
-          document.documentElement.style.overflow = ''; // Reset overflow behavior
-        };
-      },  []);
-
-      const addedValues = {
-        itemName: "Black T-shirt",
-        qty: 2,
-        unitPrice: 100,
-        totalPrice: 200,
-        subTotPrice: 100,
-        shippingFee: 50,
-        discountAmt: 0,
-        totalOrderAmt: 100
-    };
 
     // State to track form values
     const [formData, setFormData] = useState({
@@ -44,7 +19,19 @@ const Details = () => {
         zip: "",
     });
 
-    const getValue = (key) => addedValues[key];
+    const storeAndNavigate = () => {
+        const randomId = Math.floor(Math.random() * 1000000);
+
+        localStorage.setItem("randomId", randomId);
+        localStorage.setItem("itemName", "Iphone 15 Pro");
+        localStorage.setItem("itemModel", "Iphone 15 Pro, 512 Gold");
+        localStorage.setItem("qty", "1");
+        localStorage.setItem("unitPrice", "29,999,000");
+        localStorage.setItem("shipFee", "1,000");
+        localStorage.setItem("disAmount", "1,000,000");
+
+        navigate("/next-page"); // Redirect after storing values
+    };
 
     // State for error messages
     const [errors, setErrors] = useState({});
@@ -57,7 +44,7 @@ const Details = () => {
     // Form validation before navigation
     const handleSubmit = (e) => {
         e.preventDefault();
-
+        navigate("/payMethod", { state: formData });
         let newErrors = {};
 
         // Check if required fields are empty
@@ -77,45 +64,13 @@ const Details = () => {
     };
 
     return (
-        <div className="w-screen h-screen mx-auto bg-gray-100 flex justify-center overflow-hidden">
-            <div className="w-full h-full max-w-2xl rounded-lg bg-white p-5 items-center overflow-auto"> {/* ADD VERTICAL MARGIN TO CENTER my-12 */}
+        <div className="w-auto h-screen mx-auto bg-gray-100 flex justify-center overflow-hidden">
+            <div className="w-full h-fit max-w-2xl rounded-lg bg-white p-5 my-4 items-center overflow-auto"> {/* ADD VERTICAL MARGIN TO CENTER my-12 */}
                 
                 <form className="w-full max-w-3xl" onSubmit={handleSubmit}>
 
-                    {/* Order Summary 
-                        itemname, quantity, unit price, total price
-                        subtotal price, shipping price, discount amount, totalorderamount
-                    */}
-
-                    <div className="flex flex-col md:flex-col gap-2 rounded-xl border-2 border-black-600">
-
-                        <h2 className="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2 ml-4 my-4">Order Summary</h2>
-
-                        <img className="h-48 w-full object-contain" src={orderImage} alt="Black T-shirt" />
-
-                        <div className="flex flex-col md:flex-row gap-2 my-4 mx-4">
-                            <label className="flex-1 block tracking-wide text-gray-700 text-xl font-bold mb-2 ml-4 grid justify-items-end">{getValue("itemName")}</label>
-                            <label className="flex-1 block tracking-wide text-red-500 text-xl font-bold mb-2 ml-4">Php {getValue("unitPrice")}.00</label>
-                        </div>
-
-                        <hr className="border-t-2 border-gray-300 mx-3" />
-
-                        <h2 className="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2 ml-4 my-4">Payment Summary</h2>
-
-                        <div className="flex flex-col md:flex-row gap-2 my-4 mx-4">
-                            <label className="flex-1 block tracking-wide text-gray-700 text-xl font-bold mb-2 ml-4 grid justify-items-end">Qty: {getValue("qty")}</label>
-                            <label className="flex-1 block tracking-wide text-red-500 text-xl font-bold mb-2 ml-4">Total: {getValue("totalPrice")}</label>
-                        </div>
-
-                        <div className="flex flex-col md:flex-row gap-2 my-4 mx-4">
-                            <label className="flex-1 block tracking-wide text-gray-700 text-xl font-bold mb-2 ml-4 grid justify-items-end">Discount:</label>
-                            <label className="flex-1 block tracking-wide text-red-500 text-xl font-bold mb-2 ml-4">Php {getValue("discountAmt")}.00</label>
-                        </div>
-
-                    </div>
-
                     {/* Personal Details */}
-                    <h2 className="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2">Personal Details</h2>
+                    <h2 className="mb-3 text-[22px] font-bold">Personal Details</h2>
 
                     <div className="flex flex-col md:flex-row gap-2">
 
@@ -125,7 +80,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="firstName"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.firstName ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="Jane"
@@ -141,7 +96,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="lastName"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.lastName ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="Doe"
@@ -161,7 +116,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="mobile"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.mobile ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="+63 9XXXXXXXXX"
@@ -177,7 +132,7 @@ const Details = () => {
                             <input
                                 type="email"
                                 name="email"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.email ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="janedoe@gmail.com"
@@ -189,7 +144,7 @@ const Details = () => {
                     </div>
 
                     {/* Billing Information */}
-                    <h2 className="block uppercase tracking-wide text-gray-700 text-xl font-bold mb-2">Billing Information</h2>
+                    <h2 className="mb-3 text-[22px] font-bold">Billing Information</h2>
 
                     <div className="flex flex-col md:flex-row gap-2">
 
@@ -199,7 +154,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="street"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.street ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="123 Talamban Road"
@@ -215,7 +170,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="barangay"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.barangay ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="Apas Lahug"
@@ -234,7 +189,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="city"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.city ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="Cebu City"
@@ -250,7 +205,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="region"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.region ? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="Region VII"
@@ -266,7 +221,7 @@ const Details = () => {
                             <input
                                 type="text"
                                 name="zip"
-                                className={`appearance-none block w-full bg-gray-200 text-gray-700 border ${
+                                className={`border rounded-xl p-2 w-full ${
                                     errors.zip? "border-red-500" : "border-gray-300"
                                 } rounded py-3 px-4 mb-3 focus:outline-none focus:bg-white`}
                                 placeholder="6000"
@@ -280,11 +235,13 @@ const Details = () => {
                     {/* Submit Button */}
                     <div className="flex flex-col gap-2">
                         <button
-                            type="submit"
-                            className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
-                            /* onClick={() => navigate('/ewallet')} /* Remove for input field tests */
-                        >
-                            Proceed to Payment
+                        type="submit"
+                        className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
+                        onClick={() => {
+                            navigate('/payMethod');
+                            storeAndNavigate();
+                        }}
+                        > Proceed to Payment
                         </button>
                     </div>
                 </form>
@@ -294,3 +251,5 @@ const Details = () => {
 };
 
 export default Details;
+
+
