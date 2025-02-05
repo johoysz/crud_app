@@ -1,12 +1,11 @@
 import { createBrowserRouter} from 'react-router-dom';
-import Login from './views/login';
 import Register from './views/register';
 //import ErrorPage from './views/ErrorPage';
 import DefaultLayout from './assets/Components/DefaultLayout';
 import GuestLayout from './assets/Components/GuestLayout';
 
-import Details from './views/details';
-import PayMethod from './views/payMethod';
+import Details from './views/PersonalDetails';
+import PayMethod from './views/PayMethod';
 //import Users from './views/users';
 
 const router = createBrowserRouter ([
@@ -15,11 +14,11 @@ const router = createBrowserRouter ([
         element: <DefaultLayout />,
         children: [
             {
-                path: '/details',
-                element: <Details /> //follow the variable name used
+                path: '/PersonalDetails',
+                element: <Details />
             },
             {
-                path: '/payMethod',
+                path: '/PayMethod',
                 element: <PayMethod />
             },
         ]
@@ -28,10 +27,6 @@ const router = createBrowserRouter ([
         path: '/',
         element: <GuestLayout />,
         children: [
-            {
-                path: '/login',
-                element: <Login />,
-            },
             {
                 path: '/register', 
                 element: <Register />,

@@ -2,10 +2,9 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const Details = () => {
+const PersonalDetails = () => {
     const navigate = useNavigate();
 
-    // State to track form values
     const [formData, setFormData] = useState({
         firstName: "",
         middleName: "",
@@ -20,18 +19,23 @@ const Details = () => {
     });
 
     const storeAndNavigate = () => {
-        const randomId = Math.floor(Math.random() * 1000000);
-
-        localStorage.setItem("randomId", randomId);
+        // Store user input (form data)
+        Object.keys(formData).forEach((key) => {
+            localStorage.setItem(key, formData[key]);
+        });
+    
+        // Store hardcoded product details
+        localStorage.setItem("randomId", Math.floor(Math.random() * 1000000));
         localStorage.setItem("itemName", "Iphone 15 Pro");
         localStorage.setItem("itemModel", "Iphone 15 Pro, 512 Gold");
         localStorage.setItem("qty", "1");
         localStorage.setItem("unitPrice", "29,999,000");
         localStorage.setItem("shipFee", "1,000");
         localStorage.setItem("disAmount", "1,000,000");
-
-        navigate("/next-page"); // Redirect after storing values
+    
+        navigate("/PayMethod"); // Redirect after storing values
     };
+    
 
     // State for error messages
     const [errors, setErrors] = useState({});
@@ -44,7 +48,7 @@ const Details = () => {
     // Form validation before navigation
     const handleSubmit = (e) => {
         e.preventDefault();
-        navigate("/payMethod", { state: formData });
+        navigate("/PayMethod", { state: formData });
         let newErrors = {};
 
         // Check if required fields are empty
@@ -238,7 +242,7 @@ const Details = () => {
                         type="submit"
                         className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded"
                         onClick={() => {
-                            navigate('/payMethod');
+                            navigate('/PayMethod');
                             storeAndNavigate();
                         }}
                         > Proceed to Payment
@@ -250,6 +254,4 @@ const Details = () => {
     );
 };
 
-export default Details;
-
-
+export default PersonalDetails;

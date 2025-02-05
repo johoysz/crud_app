@@ -1,29 +1,27 @@
 import IphoneImage from '../assets/images/iphone.png';
-import { useLocation } from "react-router-dom";
 
-const payMethod = () => {
-    // eslint-disable-next-line react-hooks/rules-of-hooks
-    const location = useLocation();
-    const {
-        firstName,
-        middleName,
-        lastName,
-        email,
-        mobile,
-        street,
-        barangay,
-        city,
-        region,
-        zip,
-        randomId,
-        itemName,
-        qty,
-        unitPrice,
-        itemModel,
-        shipFee,
-        disAmount,
-    } = location.state || {};
+const PayMethod = () => {
 
+    const storedData = {
+        firstName: localStorage.getItem("firstName") || "N/A",
+        middleName: localStorage.getItem("middleName"),
+        lastName: localStorage.getItem("lastName"),
+        mobile: localStorage.getItem("mobile") || "N/A",
+        email: localStorage.getItem("email") || "N/A",
+        street: localStorage.getItem("street") || "N/A",
+        barangay: localStorage.getItem("barangay") || "N/A",
+        city: localStorage.getItem("city") || "N/A",
+        region: localStorage.getItem("region") || "N/A",
+        zip: localStorage.getItem("zip") || "N/A",
+        randomId: localStorage.getItem("randomId") || "N/A",
+        itemName: localStorage.getItem("itemName") || "N/A",
+        itemModel: localStorage.getItem("itemModel") || "N/A",
+        qty: localStorage.getItem("qty") || "N/A",
+        unitPrice: localStorage.getItem("unitPrice") || "N/A",
+        shipFee: localStorage.getItem("shipFee") || "N/A",
+        disAmount: localStorage.getItem("disAmount") || "N/A",
+    };
+    
   return (
     <div className='w-auto h-auto mx-auto p-6 bg-gray-100 gap-4 grid grid-cols-[60%_40%] w-full'>
         <div className='rounded-lg bg-white p-5'>
@@ -37,15 +35,15 @@ const payMethod = () => {
                 <div className="grid grid-cols-3 gap-2 mt-3">
                     <div className="relative">
                         <p>Fullname</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={firstName + middleName + lastName || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={`${storedData.firstName || ""} ${storedData.middleName || ""} ${storedData.lastName || ""}`.trim() || "N/A"} />
                     </div>
                     <div>
                         <p>Email</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={email || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={storedData.email || "N/A"} />
                     </div>
                     <div>
                         <p>Phone number</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" value={mobile || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" value={storedData.mobile || "N/A"} />
                     </div>
                 </div>
             </div>
@@ -58,23 +56,23 @@ const payMethod = () => {
                 <div className="grid grid-cols-3 gap-2 mt-3">
                     <div className="relative">
                         <p>Street</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={street || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={storedData.street || "N/A"} />
                     </div>
                     <div>
                         <p>Barangay</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={barangay || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" type="text" value={storedData.barangay || "N/A"} />
                     </div>
                     <div>
                         <p>City</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" value={city || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" value={storedData.city || "N/A"} />
                     </div>
                     <div>
                         <p>Region</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" value={region || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" value={storedData.region || "N/A"} />
                     </div>
                     <div>
                         <p>Zip</p>
-                        <input readOnly className="border rounded-xl p-2 w-full" value={zip || "N/A"} />
+                        <input readOnly className="border rounded-xl p-2 w-full" value={storedData.zip || "N/A"} />
                     </div>
                 </div>
 
@@ -89,7 +87,18 @@ const payMethod = () => {
                 <div className='mt-3 rounded-lg bg-gray-50 p-5 w-full h-32 text-center'>
                     <div className='grid justify-center items-center'>
                         <p>Your total payment</p>
-                        <p className='font-bold text-[30px]'>$ {((unitPrice*qty) + shipFee) - disAmount || "N/A"} </p>
+                        <p className="font-bold">
+                            {(() => {
+                                const total = 
+                                    ((parseFloat(storedData.unitPrice.replace(/[^0-9.-]+/g, "")) || 0) * (parseInt(storedData.qty) || 0) + 
+                                    (parseFloat(storedData.shipFee.replace(/[^0-9.-]+/g, "")) || 0) - 
+                                    (parseFloat(storedData.disAmount.replace(/[^0-9.-]+/g, "")) || 0));
+
+                                // Return formatted total with commas or "N/A" if invalid
+                                return isNaN(total) ? "N/A" : `$${new Intl.NumberFormat().format(total)}`;
+                            })()}
+                        </p>
+
                         <p className='text-[11px] text-gray-400'>Pay before March 13</p>
                     </div>
                 </div>
@@ -136,16 +145,16 @@ const payMethod = () => {
         <div className='rounded-lg bg-white p-5'>
             <div className='border border-gray-300 p-5 rounded-lg mx-auto'>
                 <p className='font-bold'>Order ID</p>
-                <div> {randomId || "N/A"} </div>
+                <div> {storedData.randomId || "N/A"} </div>
                 <div className='p-5 flex justify-center border border-gray-300 rounded-lg bg-gray-50'>
                     <img src={IphoneImage} width="80" height="100" />
                 </div>
                 <div className='p-2'>
                     <div className="max-w-4xl mx-auto flex justify-between">
-                        <p className="font-bold" > {itemName || "N/A"} </p>
-                        <p className="font-bold">$ {unitPrice || "N/A"} </p>
+                        <p className="font-bold" > {storedData.itemName || "N/A"} </p>
+                        <p className="font-bold">$ {storedData.unitPrice || "N/A"} </p>
                     </div>
-                    <p className='text-[12px]'> {itemModel || "N/A"} </p>
+                    <p className='text-[12px]'> {storedData.itemModel || "N/A"} </p>
                 </div>
             </div>
             <p className='font-bold mt-3 mb-3'>Payment Summary</p>
@@ -154,24 +163,35 @@ const payMethod = () => {
 
                     <div className="max-w-4xl mx-auto flex justify-between">
                         <p className="font-bold">Quantity</p>
-                        <p className="font-bold"> {qty || "N/A"} </p>
+                        <p className="font-bold"> {storedData.qty || "N/A"} </p>
                     </div>
 
                     <div className="max-w-4xl mx-auto flex justify-between">
                         <p className="font-bold">Shipping Fee</p>
-                        <p className="font-bold">$ {shipFee || "N/A"} </p>
+                        <p className="font-bold">$ {storedData.shipFee || "N/A"} </p>
                     </div>
 
                     <div className="max-w-4xl mx-auto flex justify-between">
                         <p className="font-bold">Discount</p>
-                        <p className="font-bold">$ {disAmount || "N/A"} </p>
+                        <p className="font-bold">$ {storedData.disAmount || "N/A"} </p>
                     </div>
 
                     <hr className="h-px mb-3 bg-gray-100 border-0 dark:bg-gray-300" />
 
                     <div className="max-w-4xl mx-auto flex justify-between">
                         <p className="font-bold">TOTAL</p>
-                        <p className="font-bold">$ {((unitPrice*qty) + shipFee) - disAmount || "N/A"} </p>
+                        <p className="font-bold">
+                            {(() => {
+                                const total = 
+                                    ((parseFloat(storedData.unitPrice.replace(/[^0-9.-]+/g, "")) || 0) * (parseInt(storedData.qty) || 0) + 
+                                    (parseFloat(storedData.shipFee.replace(/[^0-9.-]+/g, "")) || 0) - 
+                                    (parseFloat(storedData.disAmount.replace(/[^0-9.-]+/g, "")) || 0));
+
+                                // Return formatted total with commas or "N/A" if invalid
+                                return isNaN(total) ? "N/A" : `$${new Intl.NumberFormat().format(total)}`;
+                            })()}
+                        </p>
+
                     </div>
 
                 </div>
@@ -184,4 +204,4 @@ const payMethod = () => {
   )
 }
 
-export default payMethod
+export default PayMethod;
